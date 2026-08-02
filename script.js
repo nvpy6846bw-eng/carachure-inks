@@ -1,22 +1,24 @@
 // ==================================
 // CARACHURE INKS
-// SCRIPT.JS
+// EDITORIAL SCRIPT
 // ==================================
 
 
-// Smooth scrolling for navigation links
+// Smooth scrolling
 
 document.querySelectorAll('a[href^="#"]').forEach(link => {
 
     link.addEventListener("click", function(e){
 
-        const target = document.querySelector(this.getAttribute("href"));
+        const section = document.querySelector(
+            this.getAttribute("href")
+        );
 
-        if(target){
+        if(section){
 
             e.preventDefault();
 
-            target.scrollIntoView({
+            section.scrollIntoView({
 
                 behavior:"smooth"
 
@@ -32,16 +34,46 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 
 
 
-// Reveal animations on scroll
+// Header background on scroll
+
+const header = document.querySelector("header");
 
 
-const revealElements = document.querySelectorAll(
-    ".title, .aboutImage, .aboutText, .feature, .item, .specialtyCard, .bookingBox, .instagramBox, .contactBox"
+window.addEventListener("scroll", ()=>{
+
+
+    if(window.scrollY > 80){
+
+        header.style.background =
+        "rgba(8,8,8,.95)";
+
+    }
+
+    else{
+
+        header.style.background =
+        "linear-gradient(to bottom,rgba(8,8,8,.85),transparent)";
+
+    }
+
+
+});
+
+
+
+
+
+
+// Fade reveal animations
+
+
+const revealItems = document.querySelectorAll(
+    ".artist, .speciality, .photo, .bookingInner, .processGrid div, .instagram, .contact"
 );
 
 
 
-const observer = new IntersectionObserver((entries)=>{
+const revealObserver = new IntersectionObserver((entries)=>{
 
 
     entries.forEach(entry=>{
@@ -49,7 +81,7 @@ const observer = new IntersectionObserver((entries)=>{
 
         if(entry.isIntersecting){
 
-            entry.target.classList.add("show");
+            entry.target.classList.add("active");
 
         }
 
@@ -65,40 +97,11 @@ const observer = new IntersectionObserver((entries)=>{
 
 
 
-revealElements.forEach(element=>{
+revealItems.forEach(item=>{
 
-    element.classList.add("hidden");
+    item.classList.add("fade");
 
-    observer.observe(element);
-
-});
-
-
-
-
-
-
-// Navbar background change while scrolling
-
-
-const nav = document.querySelector("nav");
-
-
-window.addEventListener("scroll",()=>{
-
-
-    if(window.scrollY > 80){
-
-        nav.style.background="rgba(0,0,0,.9)";
-
-    }
-
-    else{
-
-        nav.style.background="rgba(0,0,0,.65)";
-
-    }
-
+    revealObserver.observe(item);
 
 });
 
@@ -107,19 +110,41 @@ window.addEventListener("scroll",()=>{
 
 
 
-// Gallery image click effect
+
+// Portfolio image viewer
 
 
-const galleryImages = document.querySelectorAll(".item img");
+const images = document.querySelectorAll(".photo img");
 
 
-galleryImages.forEach(image=>{
+images.forEach(image=>{
 
 
     image.addEventListener("click",()=>{
 
 
-        image.classList.toggle("zoom");
+        const viewer = document.createElement("div");
+
+
+        viewer.className="imageViewer";
+
+
+        viewer.innerHTML=`
+
+            <img src="${image.src}">
+
+        `;
+
+
+        document.body.appendChild(viewer);
+
+
+
+        viewer.addEventListener("click",()=>{
+
+            viewer.remove();
+
+        });
 
 
     });
